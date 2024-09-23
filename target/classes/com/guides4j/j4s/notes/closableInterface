@@ -1,0 +1,125 @@
+In Java, the Closeable and AutoCloseable interfaces are used to manage resources that need to be explicitly closed after use, 
+such as files, network sockets, or database connections. 
+These interfaces provide a mechanism for releasing resources and avoiding memory leaks.
+Both are typically used in conjunction with the try-with-resources statement, 
+introduced in Java 7, to automatically close resources when they are no longer needed.
+
+ 1. Closeable` Interface:
+
+The Closeable interface is part of the `java.io` package and is primarily used for I/O classes like `InputStream`, `OutputStream`, `Reader`, `Writer`, etc. It defines a single method:
+
+java
+public interface Closeable {
+    void close() throws IOException;
+}
+
+
+ Key Points:
+- Purpose: It's used to release I/O-related resources, such as files or streams.
+- Throws: The `close()` method can throw an `IOException`, which indicates an I/O error occurred during the closing of the resource.
+- Common Classes Implementing `Closeable`:
+  - `FileInputStream`
+  - `FileOutputStream`
+  - `BufferedReader`
+  - `BufferedWriter`
+  - `Socket`
+
+ Example with `Closeable`:
+
+java
+import java.io.*;
+
+public class CloseableExample {
+    public static void main(String[] args) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("example.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+
+In this example, the `BufferedReader` automatically closes at the end of the try block, even if an exception occurs, because it implements `Closeable`.
+
+ 2. AutoCloseable` Interface:
+
+The AutoCloseable interface is a more general form of `Closeable`. It was introduced in Java 7 and is part of the `java.lang` package. It also defines a single method:
+
+java
+public interface AutoCloseable {
+    void close() throws Exception;
+}
+
+
+ Key Points:
+- Purpose: It is designed for any resources that need to be closed, not just I/O resources.
+- Throws: The `close()` method can throw a more generic `Exception`, unlike `Closeable`, which throws only `IOException`.
+- Compatibility: All `Closeable` classes are also `AutoCloseable`, as `Closeable` extends `AutoCloseable`.
+- Common Classes Implementing `AutoCloseable`:
+  - JDBC connections (`Connection`, `Statement`, `ResultSet`)
+  - Any custom class that requires resource cleanup can implement `AutoCloseable`.
+
+ Example with `AutoCloseable`:
+
+java
+class CustomResource implements AutoCloseable {
+    public void doSomething() {
+        System.out.println("Using the resource...");
+    }
+
+    @Override
+    public void close() throws Exception {
+        System.out.println("Closing the resource...");
+    }
+}
+
+public class AutoCloseableExample {
+    public static void main(String[] args) {
+        try (CustomResource resource = new CustomResource()) {
+            resource.doSomething();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+
+In this case, the `CustomResource` class implements `AutoCloseable`, and its `close()` method will automatically be called at the end of the try block.
+
+ 3. Differences Between `Closeable` and `AutoCloseable`:
+
+| Aspect                    | `Closeable`                              | `AutoCloseable`                         |
+|---------------------------|------------------------------------------|-----------------------------------------|
+| Package                    | `java.io`                                | `java.lang`                             |
+| Introduced in              | Java 5                                   | Java 7                                  |
+| Method Signature           | `void close() throws IOException`        | `void close() throws Exception`         |
+| Exception Handling         | Can only throw `IOException`             | Can throw any `Exception`               |
+| Usage                      | Designed for I/O resources               | Can be used for any resource management |
+| Extends                    | Extends `AutoCloseable`                  | No parent interface                     |
+
+ When to Use:
+- Use `Closeable`: If you are working with I/O resources, such as streams or files.
+- Use `AutoCloseable`: If you're handling non-I/O resources or need more generic exception handling in your custom classes.
+
+ 4. Try-with-Resources:
+
+Both `Closeable` and `AutoCloseable` are typically used with try-with-resources to ensure that the `close()` method is automatically called at the end of the block, avoiding manual resource management.
+
+java
+try (ResourceType resource = new ResourceType()) {
+    // Use the resource
+} catch (Exception e) {
+    e.printStackTrace();
+}
+
+
+The resource is closed automatically at the end of the block, ensuring proper cleanup and reducing the risk of resource leaks.
+
+ Conclusion:
+
+- Closeable is tailored to I/O operations.
+- AutoCloseable is more general and can be used for any resources.
