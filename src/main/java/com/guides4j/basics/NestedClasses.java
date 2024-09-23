@@ -3,7 +3,7 @@ package com.guides4j.basics;
 public class NestedClasses {
 	static String checkStatic = "Accessing Static";
 	String checkNonStatic = "Acessing Non Static";
-
+//	 both can access the private members of a class
 	public static class StaticNestedClass {
 //		can have both static and NonStatic variables and Methods
 		private final String aboutMe = "StaticNested";
@@ -39,13 +39,24 @@ public class NestedClasses {
 			void display() {
 				// Access final local variable from the enclosing method
 				System.out.println(localVar);
-//	               Accessing Outer members of the class depends on the Method Signature
+//				System.out.println(k);
+/*
+ *             Accessing the members must be Effectively final or Final  
+ *             Due to the following Reasons:
+ *             Consistency: Avoiding value changes that could lead to inconsistent behavior.
+ *			   Thread Safety: Preventing issues in multithreaded environments where variables might be modified unexpectedly.
+ *			   Scope Integrity: Maintaining clarity and predictability by keeping variable values stable within the method’s scope.
+ *               
+ */
 
 			}
+			
 		}
+		
 
 		LocalMethodInnerClass local = new LocalMethodInnerClass();
 		local.display();
+		k = 20;
 	}
 
 	public static void main(String[] args) {
@@ -53,6 +64,7 @@ public class NestedClasses {
 		NestedClasses.StaticNestedClass st = new NestedClasses.StaticNestedClass();
 		st.getDetails();
 		NestedClasses nest = new NestedClasses();
+		nest.method();
 		NonStaticNestedClass ns = nest.new NonStaticNestedClass();
 		ns.getDetails();
 	}
