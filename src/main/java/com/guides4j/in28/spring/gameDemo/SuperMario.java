@@ -1,5 +1,10 @@
 package com.guides4j.in28.spring.gameDemo;
 
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Component;
+
+@Component
+@Primary
 public class SuperMario implements Game{
 
 	@Override

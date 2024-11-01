@@ -1,5 +1,10 @@
 package com.guides4j.in28.spring.gameDemo;
 
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+
+@Component
+@Qualifier("SuperContra")
 public class Contra implements Game{
 
 	@Override
