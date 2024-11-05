@@ -4,12 +4,10 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.guides4j</groupId>
-  <artifactId>javacore4s</artifactId>
+  <artifactId>core-java</artifactId>
   <version>0.0.1-SNAPSHOT</version>
 
-  <name>javacore4s</name>
-  <!-- FIXME change it to the project's website -->
-  <url>http://www.example.com</url>
+  <name>core-java</name>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
