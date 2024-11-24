@@ -4,15 +4,18 @@ import java.util.function.Function;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class ToDoSpringSecurityConfiguration {
-	/* default version 2.1.0
+	/* default version 1.1.0
 	 * Here we used withDefaultPasswordEncoder which is deprecated so we opted to use a Strong hashing alogoirth i,e BCryptyEncoder()
 		@Bean
 		public InMemoryUserDetailsManager userManager() {
@@ -50,5 +53,14 @@ public class ToDoSpringSecurityConfiguration {
 		return new BCryptPasswordEncoder();
 	}
 	
+	@Bean
+	public SecurityFilterChain httpRquestChain(HttpSecurity httpSecurity) throws Exception {
+		httpSecurity.authorizeRequests(req->req.anyRequest().authenticated());
+		httpSecurity.formLogin(org.springframework.security.config.Customizer.withDefaults());
+		httpSecurity.csrf().disable();
+		httpSecurity.headers().frameOptions().disable();	
+		
+		return httpSecurity.build();
+	}
 
 }

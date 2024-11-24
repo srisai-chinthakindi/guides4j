@@ -4,11 +4,16 @@ import java.time.LocalDate;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.Size;
 
-
+@Entity(name="tododb")
 public class ToDo {
 	
+	@Id
+	@GeneratedValue
 	private long id;
 	
 	@Size(min=10, message = "Enter Atleast 10 Characters")

@@ -15,12 +15,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.validation.Valid;
 
-//@Controller 
-// for Prototype-1 version
-public class toDoController {
+@Controller
+public class toDoController_JPA {
 
 	@Autowired
-	ToDoService toDoService;
+	ToDoRepository toDoRepo;
 	
 	@RequestMapping("/")
 	public String defaultPage(ModelMap map) {
@@ -33,51 +32,49 @@ public class toDoController {
 	public String getAllToDos(ModelMap map) {
 		String UserName = getUserName(map);
 		
-		List<ToDo> todos = toDoService.getSampleData(UserName);
+		List<ToDo> todos = toDoRepo.findByCreatedBy(UserName);
 		map.addAttribute("todos", todos);
 		return "list-todos";
 	}
 
 	@RequestMapping(value = "add-todo", method = RequestMethod.GET)
 	public String addToDos(ModelMap map) {
-//	one-side binding which will be reflected in list-todos	i,e bean to from
 		map.put("userName", getUserName(map));
-		map.addAttribute("todo",new ToDo(0,"Default Task", getUserName(map), LocalDate.now(), false));
-		
+		map.addAttribute("todo",new ToDo(0," ", getUserName(map), LocalDate.now(), false));
 		return "addToDo";
 	}
 
 	@RequestMapping(value = "add-todo", method = RequestMethod.POST)
-	public String addingToDosManage(ModelMap map,@Valid ToDo todo,BindingResult result) {
+	public String addingToDosManage(ModelMap map,@Valid @ModelAttribute("todo") ToDo todo,BindingResult result) {
 		if(result.hasErrors()) { 
 			return "addToDo";
 		}
 //		two-way binding i,e form to Bean
 		todo.setCreatedBy(getUserName(map));
-		toDoService.addToDos(todo);
+		toDoRepo.save(todo);
 		return "redirect:todos";
 	}
 	
 	@RequestMapping("delete-todos")
 	public String deleteToDo(@RequestParam long id) {
-		toDoService.deleteById(id);
+		toDoRepo.deleteById(id);
 		return "redirect:todos";
 	}
 	
 	@RequestMapping(value="update-todos", method = RequestMethod.GET )
 	public String updateFromToDo(@RequestParam long id,ModelMap map) {
-		ToDo todo = toDoService.findById(id);
+		ToDo todo = toDoRepo.findById(id).get();
 		map.addAttribute("todo",todo);
 		return "addToDo";
 	}
 	
 	@RequestMapping(value="update-todos", method = RequestMethod.POST )
-	public String updateToDo(ModelMap map,@Valid ToDo todo,BindingResult result) {
+	public String updateToDo(ModelMap map,@Valid @ModelAttribute("todo") ToDo todo,BindingResult result) {
 		if(result.hasErrors()) { 
 			return "addToDo";
 		}
 		todo.setCreatedBy(getUserName(map));
-		toDoService.updateById(todo);
+		toDoRepo.save(todo);
 		return "redirect:todos";
 	}
 	
