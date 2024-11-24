@@ -49,7 +49,8 @@ public class HelloWorldController {
 		return "sayHelloJsp";
 	}
 
-	// Default
+/* Default -- In Prototype1
+
 	@RequestMapping(value = "login", method = RequestMethod.GET)
 	public String gotoLogin() {
 		return "login";
@@ -67,5 +68,7 @@ public class HelloWorldController {
 		return "login";
 
 	}
+ 
+ */
 
 }

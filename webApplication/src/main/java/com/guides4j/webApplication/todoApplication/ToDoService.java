@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import jakarta.validation.Valid;
@@ -18,17 +20,17 @@ public class ToDoService {
 		List<ToDo> todos = new ArrayList<>();
 		todos.add(new ToDo(++count,"Walking","srisai",LocalDate.now(),false));
 		todos.add(new ToDo(++count,"LeetCode","srisai",LocalDate.now(),false));
-		todos.add(new ToDo(++count,"SpringCourse","srisai",LocalDate.now(),true));
+		todos.add(new ToDo(++count,"SpringCourse","gopi",LocalDate.now(),true));
 		masterToDos.addAll(todos);
 	}
 
-	public List<ToDo> getSampleData(){
-		
-		return masterToDos;
+	public List<ToDo> getSampleData(String userName){
+		Predicate<ToDo> p = item -> item.getCreatedBy().equalsIgnoreCase(userName);
+		return masterToDos.stream().filter(p).toList();
 	}
 	
 	public void addToDos(ToDo todo) {
-		masterToDos.add(new ToDo(++count,todo.getName(),"Srisai",todo.getCreatedAt(),false));
+		masterToDos.add(new ToDo(++count,todo.getName(),todo.getCreatedBy(),todo.getCreatedAt(),false));
 	}
 
 	public void deleteById(long id) {
@@ -46,6 +48,8 @@ public class ToDoService {
 		 deleteById(todo.getId());
 		 addToDos(todo);
 	}
+	
+	
 }
 
 

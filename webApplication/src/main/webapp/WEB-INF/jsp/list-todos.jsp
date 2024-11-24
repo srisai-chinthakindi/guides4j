@@ -21,7 +21,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach items="${todos}" var="t">
+			<c:forEach items="${todos}" var="t" >
 				<tr>
 					<td>${t.name}</td>
 					<td>${t.createdBy}</td>
